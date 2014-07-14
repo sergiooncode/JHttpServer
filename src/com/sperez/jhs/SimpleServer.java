@@ -6,46 +6,46 @@ public class SimpleServer {
     private ReaderWriter readerWriter;
     private String requestMessageLine;
     private ServerSocketInterface listenSocket;
+    private ResponseMaker maker;
 
     public SimpleServer (ServerSocketInterface listenSocket) {
         this.listenSocket = listenSocket;
     }
 
-    private void setupInputOutput(){
+    public void setupInputOutput(){
         readerWriter = new ReaderWriter(connectionSocket);
     }
 
-    private void connectToClient(){
+    public void setupResponseMaker(ResponseMaker maker) {
+        this.maker = maker;
+    }
+
+    public void connectToClient(){
         connectionSocket = listenSocket.accept();
     }
 
-    private String readRequest(){
+    public void disconnect(){
+        connectionSocket.close();
+    }
+
+    public String readRequest(){
         String request = readerWriter.readLine();
         System.out.println("Request: " + request);
         return request;
     }
 
-    private void sendResponse(String response){
-//        readerWriter.writeLine(response);
-        readerWriter.writeAll(response);
+    public void sendResponse(String response){
+        readerWriter.writeLine(response);
+//        readerWriter.writeAll(response);
         readerWriter.sendAll();
     }
 
-    private void disconnect(){
-        connectionSocket.close();
-    }
-
-    private String makeResponse(){
-        ResponseMaker maker = new ResponseMaker();
-        return maker.makeResponse(requestMessageLine);
-    }
-
-    public void run (){
+    protected void run (){
         while(keepGoing){
             connectToClient();
             setupInputOutput();
             requestMessageLine = readRequest();
-            sendResponse(makeResponse());
+            sendResponse(maker.makeResponse(requestMessageLine));
             disconnect();
         }
     }
