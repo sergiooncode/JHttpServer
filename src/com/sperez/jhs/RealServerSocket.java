@@ -21,7 +21,7 @@ public class RealServerSocket implements ServerSocketInterface {
         Socket connectionSocket = null;
         try{
             connectionSocket = listenSocket.accept();
-            
+
             System.out.println ("Web server waiting for request on port " + port);
 
         } catch(IOException e){
