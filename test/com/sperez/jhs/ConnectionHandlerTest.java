@@ -8,11 +8,6 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 public class ConnectionHandlerTest {
 
     @Test
-    public void testGetConnectionSocket() throws Exception {
-
-    }
-
-    @Test
     public void testConnect() throws Exception {
         ServerSocketInterface listenSocket = new MockServerSocket();
         ConnectionHandler handler = new ConnectionHandler(listenSocket);
