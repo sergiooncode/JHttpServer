@@ -6,10 +6,12 @@ public class Main {
         SimpleServer server;
         ArgumentsParser parser;
         ResponseMaker maker;
+        ConnectionHandler connectionHandler;
 
         parser = new ArgumentsParser(args);
         listenSocket = new RealServerSocket(parser.getPort());
-        server = new SimpleServer(listenSocket);
+        connectionHandler = new ConnectionHandler(listenSocket);
+        server = new SimpleServer(connectionHandler);
         maker = new ResponseMaker();
         server.setupResponseMaker(maker);
 
