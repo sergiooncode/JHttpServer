@@ -1,7 +1,7 @@
 package com.sperez.jhs;
 
 public class SimpleServer {
-    private boolean keepGoing = true;
+    private boolean keepGoing;
     private SocketInterface connectionSocket;
     private ReaderWriter readerWriter;
     private String requestMessageLine;
@@ -41,12 +41,18 @@ public class SimpleServer {
     }
 
     protected void run (){
-        while(keepGoing){
+        keepGoing = true;
+
+        while(keepGoing()){
             connectToClient();
             setupInputOutput();
             requestMessageLine = readRequest();
             sendResponse(maker.makeResponse(requestMessageLine));
             disconnect();
         }
+    }
+
+    protected boolean keepGoing() {
+        return keepGoing;
     }
 }
