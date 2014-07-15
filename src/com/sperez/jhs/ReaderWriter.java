@@ -9,8 +9,11 @@ public class ReaderWriter {
     private BufferedReader inFromClient;
     private BufferedOutputStream out;
     private OutputStreamWriter outToClient;
+    private SocketInterface connectionSocket;
 
-    public ReaderWriter(SocketInterface connectionSocket) {
+    public ReaderWriter(ConnectionHandler connectionHandler) {
+        connectionSocket = connectionHandler.getConnectionSocket();
+
         in = new InputStreamReader(connectionSocket.getInput());
         inFromClient = new BufferedReader (in);
 
