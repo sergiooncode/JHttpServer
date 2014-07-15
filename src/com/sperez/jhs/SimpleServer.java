@@ -11,7 +11,7 @@ public class SimpleServer {
         this.connectionHandler = connectionHandler;
     }
 
-    public void setupInputOutput(){
+    private void setupInputOutput(){
         readerWriter = new ReaderWriter(connectionHandler);
     }
 
@@ -31,19 +31,27 @@ public class SimpleServer {
         readerWriter.sendAll();
     }
 
-    protected void run (){
+    private void connect() {
+        connectionHandler.connect();
+    }
+
+    private void disconnect() {
+        connectionHandler.disconnect();
+    }
+
+    public void run (){
         keepGoing = true;
 
         while(keepGoing()){
-            connectionHandler.connect();
+            connect();
             setupInputOutput();
             requestMessageLine = readRequest();
             sendResponse(maker.makeResponse(requestMessageLine));
-            connectionHandler.disconnect();
+            disconnect();
         }
     }
 
-    protected boolean keepGoing() {
+    private boolean keepGoing() {
         return keepGoing;
     }
 }
