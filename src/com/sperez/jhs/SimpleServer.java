@@ -2,30 +2,21 @@ package com.sperez.jhs;
 
 public class SimpleServer {
     private boolean keepGoing;
-    private SocketInterface connectionSocket;
+    private ConnectionHandler connectionHandler;
     private ReaderWriter readerWriter;
     private String requestMessageLine;
-    private ServerSocketInterface listenSocket;
     private ResponseMaker maker;
 
-    public SimpleServer (ServerSocketInterface listenSocket) {
-        this.listenSocket = listenSocket;
+    public SimpleServer (ConnectionHandler connectionHandler) {
+        this.connectionHandler = connectionHandler;
     }
 
     public void setupInputOutput(){
-        readerWriter = new ReaderWriter(connectionSocket);
+        readerWriter = new ReaderWriter(connectionHandler);
     }
 
     public void setupResponseMaker(ResponseMaker maker) {
         this.maker = maker;
-    }
-
-    public void connectToClient(){
-        connectionSocket = listenSocket.accept();
-    }
-
-    public void disconnect(){
-        connectionSocket.close();
     }
 
     public String readRequest(){
@@ -44,11 +35,11 @@ public class SimpleServer {
         keepGoing = true;
 
         while(keepGoing()){
-            connectToClient();
+            connectionHandler.connect();
             setupInputOutput();
             requestMessageLine = readRequest();
             sendResponse(maker.makeResponse(requestMessageLine));
-            disconnect();
+            connectionHandler.disconnect();
         }
     }
 
