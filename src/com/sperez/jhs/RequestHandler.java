@@ -5,6 +5,7 @@ public class RequestHandler {
     private String rawRequest;
     private Request requestObject;
     private String requestLine;
+    private String requestBody;
 
     protected void setRawRequest(String rawRequest) {
         this.rawRequest = rawRequest;
@@ -14,8 +15,18 @@ public class RequestHandler {
         return requestLine;
     }
 
+    protected String getRequestBody() {
+        return requestBody;
+    }
+
     public void parseRequest() {
-        String[] splittedRequestLine = rawRequest.split("\r\n");
-        requestLine = splittedRequestLine[0];
+        String[] splittedRequestLinePlusHeadersAndBody = rawRequest.split("\r\n\r\n");
+
+        String requestLinePlusHeaders = splittedRequestLinePlusHeadersAndBody[0];
+        requestLine = requestLinePlusHeaders;
+
+        if (splittedRequestLinePlusHeadersAndBody.length > 1){
+            requestBody = splittedRequestLinePlusHeadersAndBody[1];
+        }
     }
 }
