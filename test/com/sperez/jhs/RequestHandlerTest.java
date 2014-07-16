@@ -19,6 +19,6 @@ public class RequestHandlerTest {
         RequestHandler handler = new RequestHandler();
         handler.setRawRequest(rawRequest);
 
-        assertEquals(null, handler.getRequestLine());
+        assertEquals("", handler.getRequestLine());
     }
 }

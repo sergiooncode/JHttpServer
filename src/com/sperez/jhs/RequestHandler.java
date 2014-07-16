@@ -11,6 +11,7 @@ public class RequestHandler {
     }
 
     protected String getRequestLine() {
+        requestLine = "";
         return requestLine;
     }
 }
