@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.instanceOf;
 
 public class RequestHandlerTest {
     private RequestHandler handler;
@@ -48,5 +49,14 @@ public class RequestHandlerTest {
         handler.parseRequest();
 
         assertEquals("Action=GetStaHA256&JobId=JOB8rw%3D&", handler.getRequestBody());
+    }
+
+    @Test
+    public void testReturnRequestObject() throws Exception {
+        String rawRequest = "GET / HTTP/1.1\r\n\r\n";
+        handler.setRawRequest(rawRequest);
+        handler.parseRequest();
+
+        assertThat(handler.getRequestObject(), instanceOf(Request.class));
     }
 }

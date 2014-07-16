@@ -11,6 +11,19 @@ public class RequestHandler {
         this.rawRequest = rawRequest;
     }
 
+    public void createRequestObject() {
+        parseRequest();
+        requestObject = new Request(requestLine);
+    }
+
+    public Request getRequestObject() {
+        return requestObject;
+    }
+
+    public void setupInputReader(ReaderWriter reader) {
+        this.reader = reader;
+    }
+
     protected String getRequestLine() {
         return requestLine;
     }
@@ -19,7 +32,7 @@ public class RequestHandler {
         return requestBody;
     }
 
-    public void parseRequest() {
+    protected void parseRequest() {
         String[] splittedRequestLinePlusHeadersAndBody = rawRequest.split("\r\n\r\n");
 
         String requestLinePlusHeaders = splittedRequestLinePlusHeadersAndBody[0];
