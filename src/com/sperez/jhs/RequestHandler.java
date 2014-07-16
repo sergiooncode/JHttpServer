@@ -15,6 +15,7 @@ public class RequestHandler {
     }
 
     public void parseRequest() {
-        requestLine = "";
+        String[] splittedRequestLine = rawRequest.split("\r\n");
+        requestLine = splittedRequestLine[0];
     }
 }

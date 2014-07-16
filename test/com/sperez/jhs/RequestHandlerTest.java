@@ -22,4 +22,14 @@ public class RequestHandlerTest {
 
         assertEquals("", handler.getRequestLine());
     }
+
+    @Test
+    public void testParseEasyGetRequest() {
+        String rawRequest = "GET / HTTP/1.1\r\n";
+        RequestHandler handler = new RequestHandler();
+        handler.setRawRequest(rawRequest);
+        handler.parseRequest();
+
+        assertEquals("GET / HTTP/1.1", handler.getRequestLine());
+    }
 }
