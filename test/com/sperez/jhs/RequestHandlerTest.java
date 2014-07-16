@@ -18,6 +18,7 @@ public class RequestHandlerTest {
         String rawRequest = "";
         RequestHandler handler = new RequestHandler();
         handler.setRawRequest(rawRequest);
+        handler.parseRequest();
 
         assertEquals("", handler.getRequestLine());
     }

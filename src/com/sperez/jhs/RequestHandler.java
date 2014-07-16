@@ -11,7 +11,10 @@ public class RequestHandler {
     }
 
     protected String getRequestLine() {
-        requestLine = "";
         return requestLine;
+    }
+
+    public void parseRequest() {
+        requestLine = "";
     }
 }
