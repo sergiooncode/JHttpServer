@@ -1,43 +1,13 @@
 package com.sperez.jhs;
 
+import com.sperez.jhs.mocks.MockServerSocket;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.assertThat;
+
 
 public class SimpleServerTest {
 
-    @Test
-    public void testSetupInputOutput() throws Exception {
 
-    }
-
-    @Test
-    public void testConnectToClient() throws Exception {
-
-    }
-
-    @Test
-    public void testReadRequest() throws Exception {
-
-    }
-
-    @Test
-    public void testSendResponse() throws Exception {
-
-    }
-
-    @Test
-    public void testDisconnect() throws Exception {
-
-    }
-
-    @Test
-    public void testMakeResponse() throws Exception {
-
-    }
-
-    @Test
-    public void testRun() throws Exception {
-
-    }
 }

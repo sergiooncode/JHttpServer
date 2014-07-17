@@ -4,8 +4,9 @@ public class SimpleServer {
     private boolean keepGoing;
     private ConnectionHandler connectionHandler;
     private ReaderWriter readerWriter;
-    private String requestMessageLine;
-    private ResponseMaker maker;
+    private ResponseHandler responseHandler;
+    private RequestHandler requestHandler;
+    private Request request;
 
     public SimpleServer (ConnectionHandler connectionHandler) {
         this.connectionHandler = connectionHandler;
@@ -13,22 +14,22 @@ public class SimpleServer {
 
     private void setupInputOutput(){
         readerWriter = new ReaderWriter(connectionHandler);
+        requestHandler.setupInputReader(readerWriter);
+        responseHandler.setupOutputWriter(readerWriter);
     }
 
-    public void setupResponseMaker(ResponseMaker maker) {
-        this.maker = maker;
+    public void setupResponseHandler(ResponseHandler responseHandler) {
+        this.responseHandler = responseHandler;
     }
 
-    public String readRequest(){
-        String request = readerWriter.readLine();
-        System.out.println("Request: " + request);
-        return request;
+    public void setupRequestHandler(RequestHandler requestHandler) {
+        this.requestHandler = requestHandler;
     }
 
-    public void sendResponse(String response){
-        readerWriter.writeLine(response);
-//        readerWriter.writeAll(response);
-        readerWriter.sendAll();
+    public void handleClient() {
+        requestHandler.handle();
+        request = requestHandler.getRequestObject();
+        responseHandler.handle(request);
     }
 
     private void connect() {
@@ -45,8 +46,7 @@ public class SimpleServer {
         while(keepGoing()){
             connect();
             setupInputOutput();
-            requestMessageLine = readRequest();
-            sendResponse(maker.makeResponse(requestMessageLine));
+            handleClient();
             disconnect();
         }
     }
