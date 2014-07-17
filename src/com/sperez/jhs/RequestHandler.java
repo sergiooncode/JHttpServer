@@ -6,6 +6,9 @@ public class RequestHandler {
     private Request requestObject;
     private String requestLine;
     private String requestBody;
+    private String requestMethod;
+    private String requestedResource;
+    private String protocol;
 
     protected void setRawRequest(String rawRequest) {
         this.rawRequest = rawRequest;
@@ -13,7 +16,7 @@ public class RequestHandler {
 
     public void createRequestObject() {
         parseRequest();
-        requestObject = new Request(requestLine);
+        requestObject = new Request(requestMethod, requestedResource, protocol, requestBody);
     }
 
     public Request getRequestObject() {
@@ -32,14 +35,34 @@ public class RequestHandler {
         return requestBody;
     }
 
+    private void parseRequestLine() {
+        String[] splittedRequestLine = requestLine.split(" ");
+        requestMethod = splittedRequestLine[0];
+        requestedResource = splittedRequestLine[1];
+        protocol = splittedRequestLine[2];
+    }
+
     protected void parseRequest() {
-        String[] splittedRequestLinePlusHeadersAndBody = rawRequest.split("\r\n\r\n");
+        if(!rawRequest.equals("")) {
+            String[] splittedRequestLinePlusHeadersAndBody;
+            splittedRequestLinePlusHeadersAndBody = rawRequest.split("\r\n\r\n");
 
-        String requestLinePlusHeaders = splittedRequestLinePlusHeadersAndBody[0];
-        requestLine = requestLinePlusHeaders;
+            String requestLinePlusHeaders;
+            requestLinePlusHeaders = splittedRequestLinePlusHeadersAndBody[0];
+            requestLine = requestLinePlusHeaders;
 
-        if (splittedRequestLinePlusHeadersAndBody.length > 1){
-            requestBody = splittedRequestLinePlusHeadersAndBody[1];
+            parseRequestLine();
+
+            if (splittedRequestLinePlusHeadersAndBody.length > 1) {
+                requestBody = splittedRequestLinePlusHeadersAndBody[1];
+            }
+        } else {
+            requestLine = "";
         }
+    }
+
+    public void readRequest() {
+        rawRequest = reader.readLine();
+        System.out.println("Request: " + rawRequest);
     }
 }

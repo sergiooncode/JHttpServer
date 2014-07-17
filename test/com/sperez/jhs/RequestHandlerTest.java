@@ -52,11 +52,33 @@ public class RequestHandlerTest {
     }
 
     @Test
-    public void testReturnRequestObject() throws Exception {
+    public void testCreateRequestObject() throws Exception {
         String rawRequest = "GET / HTTP/1.1\r\n\r\n";
         handler.setRawRequest(rawRequest);
-        handler.parseRequest();
+        handler.createRequestObject();
 
         assertThat(handler.getRequestObject(), instanceOf(Request.class));
+    }
+
+    @Test
+    public void testParsingRequestMethod() throws Exception {
+        String rawRequest = "GET / HTTP/1.1\r\n\r\n";
+        Request requestObject;
+        handler.setRawRequest(rawRequest);
+        handler.createRequestObject();
+        requestObject = handler.getRequestObject();
+
+        assertEquals("GET", requestObject.getRequestMethod());
+    }
+
+    @Test
+    public void testParsingRequestedResource() throws Exception {
+        String rawRequest = "GET / HTTP/1.1\r\n\r\n";
+        Request requestObject;
+        handler.setRawRequest(rawRequest);
+        handler.createRequestObject();
+        requestObject = handler.getRequestObject();
+
+        assertEquals("/", requestObject.getRequestedResource());
     }
 }
