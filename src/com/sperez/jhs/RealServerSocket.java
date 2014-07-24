@@ -16,7 +16,6 @@ public class RealServerSocket implements ServerSocketInterface {
         }
     }
 
-    @Override
     public RealSocket accept(){
         Socket connectionSocket = null;
         try{
@@ -28,5 +27,13 @@ public class RealServerSocket implements ServerSocketInterface {
             e.printStackTrace();
         }
         return new RealSocket(connectionSocket);
+    }
+
+    public void close() {
+        try{
+            listenSocket.close();
+        } catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }
