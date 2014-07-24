@@ -6,11 +6,14 @@ public class Main {
         SimpleServer server;
         ArgumentsParser parser;
         ConnectionHandler connectionHandler;
+        ClientHandler handler;
 
         parser = new ArgumentsParser(args);
         listenSocket = new RealServerSocket(parser.getPort());
         connectionHandler = new ConnectionHandler(listenSocket);
         server = new SimpleServer(connectionHandler);
+        handler = new ClientHandler(connectionHandler);
+        server.setupClientHandler(handler);
 
         server.run();
     }

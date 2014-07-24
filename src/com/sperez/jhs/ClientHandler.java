@@ -1,6 +1,6 @@
 package com.sperez.jhs;
 
-public class ClientHandler implements Runnable {
+public class ClientHandler {
     private ConnectionHandler connectionHandler;
     private ReaderWriter readerWriter;
     private RequestHandler requestHandler;
@@ -19,14 +19,12 @@ public class ClientHandler implements Runnable {
         responseHandler.setupOutputWriter(readerWriter);
     }
 
-    public void run() {
+    public void handle() {
         try {
             setupInputOutput();
             requestHandler.handle();
             request = requestHandler.getRequestObject();
             responseHandler.handle(request);
-        } catch(Exception e) {
-            e.printStackTrace();
         }
 
         finally {
