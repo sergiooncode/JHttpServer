@@ -7,4 +7,6 @@ public class MockServerSocket implements ServerSocketInterface {
     public MockSocket accept() {
         return new MockSocket();
     }
+
+    public void close() {}
 }
