@@ -23,15 +23,15 @@ public class RequestParserTest {
         return parser.getRequestBody();
     }
 
-    protected String getRequestMethod() {
+    private String getRequestMethod() {
         return parser.getRequestMethod();
     }
 
-    protected String getRequestedResource() {
+    private String getRequestedResource() {
         return parser.getRequestedResource();
     }
 
-    protected String getRequestProtocol() {
+    private String getRequestProtocol() {
         return parser.getRequestProtocol();
     }
 
@@ -43,20 +43,6 @@ public class RequestParserTest {
     private void parseRequestBasedOnDoubleCRLF(String rawRequest) {
         parser = new RequestParser(rawRequest);
         parser.parseRequestLinePlusHeadersAndBody();
-    }
-
-    @Test
-    public void testParseEmptyRequest() {
-        parseRequestBasedOnDoubleCRLF("");
-
-        assertEmptyHttpRequest();
-    }
-
-    @Test
-    public void testParseRequestWithOnlyTwoCRLF() {
-        parseRequestBasedOnDoubleCRLF(CRLF + CRLF);
-
-        assertEmptyHttpRequest();
     }
 
     @Test
