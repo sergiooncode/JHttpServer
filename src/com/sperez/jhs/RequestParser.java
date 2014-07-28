@@ -26,16 +26,8 @@ class RequestParser  {
 
     void parseRequestLinePlusHeadersAndBody() {
         String[] splittedRawRequest = rawRequest.split(DOUBLE_CRLF);
-        if(isRawRequestEmpty(splittedRawRequest)) {
-            requestLineAndHeaders = "";
-            requestBody = "";
-        } else if(hasOnlyStringBefore2xCRLF(splittedRawRequest)) {
-            requestLineAndHeaders = rawRequest.split(DOUBLE_CRLF)[0];
-            requestBody = "";
-        } else if(hasStringBeforeAndAfter2xCRLF(splittedRawRequest)) {
-            requestLineAndHeaders = rawRequest.split(DOUBLE_CRLF)[0];
-            requestBody = rawRequest.split(DOUBLE_CRLF)[1];
-        }
+        parseWhenOnlyLineAndHeaders(splittedRawRequest);
+        parseWhenIsCompleteRequest(splittedRawRequest);
     }
 
     void parseRequestLineAndHeaders() {
@@ -53,16 +45,26 @@ class RequestParser  {
         protocol = splittedRequestLine[2];
     }
 
-    private boolean hasStringBeforeAndAfter2xCRLF(String[] stringArray) {
+    private void parseWhenIsCompleteRequest(String[] stringArray) {
+        if(isCompleteRequest(stringArray)) {
+            requestLineAndHeaders = rawRequest.split(DOUBLE_CRLF)[0];
+            requestBody = rawRequest.split(DOUBLE_CRLF)[1];
+        }
+    }
+
+    private void parseWhenOnlyLineAndHeaders(String[] stringArray){
+        if(hasOnlyRequestLineAndHeaders(stringArray)) {
+            requestLineAndHeaders = rawRequest.split(DOUBLE_CRLF)[0];
+            requestBody = "";
+        }
+    }
+
+    private boolean isCompleteRequest(String[] stringArray) {
         return stringArray.length > 1;
     }
 
-    private boolean hasOnlyStringBefore2xCRLF(String[] stringArray) {
+    private boolean hasOnlyRequestLineAndHeaders(String[] stringArray) {
         return stringArray.length == 1;
-    }
-
-    private boolean isRawRequestEmpty(String[] stringArray) {
-        return rawRequest.equals("") || stringArray.length == 0;
     }
 
     String getRequestLineAndHeaders() {
