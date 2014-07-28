@@ -9,6 +9,7 @@ class StatusCodeHandler {
                         break;
             case 404:   statusLine = "HTTP/1.1 404 Not Found";
                         break;
+            case 405:   statusLine = "HTTP/1.1 405 Method Not Allowed";
         }
         return statusLine;
     }

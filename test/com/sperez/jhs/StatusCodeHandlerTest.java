@@ -14,4 +14,9 @@ public class StatusCodeHandlerTest {
     public void testGetStatusLine404() throws Exception {
         assertEquals("HTTP/1.1 404 Not Found", StatusCodeHandler.getStatusLine(404));
     }
+
+    @Test
+    public void testGetStatusLine405() throws Exception {
+        assertEquals("HTTP/1.1 405 Method Not Allowed", StatusCodeHandler.getStatusLine(405));
+    }
 }
