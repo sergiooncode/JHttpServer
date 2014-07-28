@@ -12,7 +12,7 @@ public class Main {
         listenSocket = new RealServerSocket(parser.getPort());
         connectionHandler = new ConnectionHandler(listenSocket);
         server = new SimpleServer(connectionHandler);
-        handler = new ClientHandler(connectionHandler);
+        handler = new ClientHandler(connectionHandler, parser.getPort(), parser.getPublicDir());
         server.setupClientHandler(handler);
 
         server.run();

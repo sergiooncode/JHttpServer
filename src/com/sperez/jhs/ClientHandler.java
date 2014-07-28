@@ -7,10 +7,11 @@ public class ClientHandler {
     private ResponseHandler responseHandler;
     private Request request;
 
-    public ClientHandler(ConnectionHandler connectionHandler) {
+
+    public ClientHandler(ConnectionHandler connectionHandler, int port, String publicDir) {
         this.connectionHandler = connectionHandler;
         this.requestHandler = new RequestHandler();
-        this.responseHandler = new ResponseHandler();
+        this.responseHandler = new ResponseHandler(port, publicDir);
     }
 
     private void setupInputOutput(){
@@ -24,7 +25,8 @@ public class ClientHandler {
             setupInputOutput();
             requestHandler.handle();
             request = requestHandler.getRequestObject();
-            responseHandler.handle(request);
+            responseHandler.setRequestObject(request);
+            responseHandler.handle();
         }
 
         finally {
