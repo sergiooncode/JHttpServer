@@ -35,4 +35,17 @@ public class Request {
     }
 
     public ArrayList<String> getRequestHeaders() {return requestHeaders;}
+
+    public boolean isGet() {
+        return getRequestMethod().equals("GET");
+    }
+
+    public boolean isPut() {
+        return getRequestMethod().equals("PUT");
+    }
+
+    public boolean isPost() {
+        return getRequestMethod().equals("POST");
+    }
+
 }
