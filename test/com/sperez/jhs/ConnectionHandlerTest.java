@@ -25,6 +25,9 @@ public class ConnectionHandlerTest {
 
     @Test
     public void testDisconnect() throws Exception {
+        handler.connect();
+        handler.disconnect();
 
+        assertTrue(handler.getConnectionSocket().isClosed());
     }
 }

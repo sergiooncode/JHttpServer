@@ -6,18 +6,20 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class MockSocket implements SocketInterface {
+    private boolean isClosed;
 
-    @Override
     public void close() {
-
+        isClosed = true;
     }
 
-    @Override
+    public boolean isClosed() {
+        return isClosed;
+    }
+
     public InputStream getInput() {
         return null;
     }
 
-    @Override
     public OutputStream getOutput() {
         return null;
     }
