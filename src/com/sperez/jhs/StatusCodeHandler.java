@@ -1,15 +1,15 @@
 package com.sperez.jhs;
 
 class StatusCodeHandler {
-    static String getStatusLine(int code) {
+    static String getStatusLine(String code) {
         String statusLine = "";
 
-        switch (code) {
-            case 200:   statusLine = "HTTP/1.1 200 OK";
-                        break;
-            case 404:   statusLine = "HTTP/1.1 404 Not Found";
-                        break;
-            case 405:   statusLine = "HTTP/1.1 405 Method Not Allowed";
+        if (code.equals("200")) {
+            statusLine = "HTTP/1.1 200 OK";
+        } else if (code.equals("404")) {
+            statusLine = "HTTP/1.1 404 Not Found";
+        } else if (code.equals("405")) {
+            statusLine = "HTTP/1.1 405 Method Not Allowed";
         }
         return statusLine;
     }
