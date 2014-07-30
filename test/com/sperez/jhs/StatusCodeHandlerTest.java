@@ -19,4 +19,9 @@ public class StatusCodeHandlerTest {
     public void testGetStatusLine405() throws Exception {
         assertEquals("HTTP/1.1 405 Method Not Allowed", StatusCodeHandler.getStatusLine("405"));
     }
+
+    @Test
+    public void testGetStatusLine301() throws Exception {
+        assertEquals("HTTP/1.1 301 Moved Permanently", StatusCodeHandler.getStatusLine("301"));
+    }
 }
