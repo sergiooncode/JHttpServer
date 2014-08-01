@@ -3,8 +3,7 @@ package com.sperez.jhs;
 public class ClientHandler {
     private ConnectionHandler connectionHandler;
     private ReaderWriter readerWriter;
-    private RequestHandler requestHandler;
-    private ResponseHandler responseHandler;
+    private HandlerInterface requestHandler, responseHandler;
     private Request request;
 
 
@@ -16,8 +15,8 @@ public class ClientHandler {
 
     private void setupInputOutput(){
         readerWriter = new ReaderWriter(connectionHandler);
-        requestHandler.setupInputReader(readerWriter);
-        responseHandler.setupOutputWriter(readerWriter);
+        requestHandler.setupInputOutput(readerWriter);
+        responseHandler.setupInputOutput(readerWriter);
     }
 
     public void handle() {

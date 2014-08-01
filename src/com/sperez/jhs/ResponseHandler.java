@@ -1,40 +1,59 @@
 package com.sperez.jhs;
 
-public class ResponseHandler {
+public class ResponseHandler implements HandlerInterface {
     private ReaderWriter writer;
     private Response responseObject;
-    private String statusLine;
+    private ResponseBuilder responseBuilder;
+    private int port;
+    private String publicDir;
+    private Request requestObject;
 
-    public void setupOutputWriter(ReaderWriter writer) {
+    public ResponseHandler(int port, String publicDir) {
+        this.port = port;
+        this.publicDir = publicDir;
+    }
+
+    @Override
+    public void setupInputOutput(ReaderWriter writer) {
         this.writer = writer;
     }
 
-    public void handle(Request requestObject) {
-        createResponseObject(requestObject);
+    @Override
+    public void handle() {
+        createResponseObject();
         sendResponse();
     }
 
-    protected void createResponseObject(Request request) {
-        if(request.getRequestMethod().equals("GET")) {
-            if(request.getRequestedResource().equals("/")) {
-                statusLine = "HTTP/1.1 200 OK";
-            }
-
-            if(request.getRequestedResource().equals("/foobar")) {
-                statusLine = "HTTP/1.1 404 Not Found";
-            }
-        }
-
-        responseObject = new Response(statusLine);
-        statusLine = "";
+    public Request getRequestObject() {
+        return requestObject;
     }
 
-    protected Response getResponseObject() {
+    public void setRequestObject(Request requestObject) {
+        this.requestObject = requestObject;
+    }
+
+    Response getResponseObject() {
         return responseObject;
     }
 
-    private void sendResponse(){
+    void createResponseObject() {
+        responseObject = callBuilder().buildResponse();
+    }
+
+    private ResponseBuilder callBuilder() {
+        responseBuilder = new ResponseBuilder(requestObject);
+        setPortAndPublicDir();
+        return responseBuilder;
+    }
+
+    private void setPortAndPublicDir() {
+        responseBuilder.setPort(port);
+        responseBuilder.setPublicDir(publicDir);
+    }
+
+    private void sendResponse() {
         writer.writeLine(responseObject);
         writer.sendAll();
+        writer.closeWriter();
     }
 }

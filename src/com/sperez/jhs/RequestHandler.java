@@ -2,38 +2,45 @@ package com.sperez.jhs;
 
 import java.util.ArrayList;
 
-public class RequestHandler {
+public class RequestHandler implements HandlerInterface {
     private ReaderWriter reader;
-    private String rawRequest;
+    private String rawRequest = "";
     private RequestParser parser;
     private Request requestObject;
 
+    @Override
     public void handle() {
         readRequest();
         createRequestObject();
     }
 
-    public void createRequestObject() {
+    void createRequestObject() {
         createParser();
         parser.parseRequest();
         requestObject = new Request(method(), resource(), protocol(), headers(), body());
+
     }
 
     public Request getRequestObject() {
         return requestObject;
     }
 
-    public void setupInputReader(ReaderWriter reader) {
+    @Override
+    public void setupInputOutput(ReaderWriter reader) {
         this.reader = reader;
     }
 
-    public void readRequest() {
-        rawRequest = reader.readLine();
+    private void readRequest() {
+        rawRequest = reader.readMessage();
         System.out.println("Request: " + rawRequest);
     }
 
     void setRawRequest(String rawRequest) {
         this.rawRequest = rawRequest;
+    }
+
+    public void setRequestObject(Request requestObject) {
+        this.requestObject = requestObject;
     }
 
     void createParser() {
