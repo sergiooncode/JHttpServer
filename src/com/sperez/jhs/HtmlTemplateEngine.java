@@ -1,11 +1,11 @@
 package com.sperez.jhs;
 
 class HtmlTemplateEngine {
-    static String pageStringWithALinks(String result, int port) {
+    static String pageStringWithALinks(String result, String port) {
         String[] splittedResult = result.split("\n");
         String templatedResult = "";
         for(int i=0; i < splittedResult.length; i++) {
-            templatedResult = templatedResult + "<a href=\"http://localhost:" + Integer.toString(port) + "/" +
+            templatedResult = templatedResult + "<a href=\"" + "/" +
             splittedResult[i] + "\">" + splittedResult[i] + "</a></br>";
         }
         return templatedResult;
