@@ -3,8 +3,8 @@ package com.sperez.jhs;
 import java.util.ArrayList;
 
 class RequestParser  {
-    final private String CRLF = "\r\n\r\n";
-    final private String DOUBLE_CRLF = "\r\n\r\n\r\n\r\n";
+    final private String CRLF = "\r\n";
+    final private String DOUBLE_CRLF = "\r\n\r\n";
     private String requestLineAndHeaders;
     private String requestLine;
     private String requestBody;
@@ -19,15 +19,34 @@ class RequestParser  {
     }
 
     void parseRequest() {
-        parseRequestLinePlusHeadersAndBody();
-        parseRequestLineAndHeaders();
-        parseRequestLine();
+        try {
+            parseRequestLinePlusHeadersAndBody();
+            parseRequestLineAndHeaders();
+            parseRequestLine();
+        } catch(Exception e) {
+            rawRequest = "GET / HTTP/1.1" + DOUBLE_CRLF;
+        }
     }
 
     void parseRequestLinePlusHeadersAndBody() {
         String[] splittedRawRequest = rawRequest.split(DOUBLE_CRLF);
         parseWhenOnlyLineAndHeaders(splittedRawRequest);
         parseWhenIsCompleteRequest(splittedRawRequest);
+    }
+
+    private void parseWhenIsCompleteRequest(String[] stringArray) {
+        if(isCompleteRequest(stringArray)) {
+            requestLineAndHeaders = rawRequest.split(DOUBLE_CRLF)[0];
+            requestBody = rawRequest.split(DOUBLE_CRLF)[1];
+        }
+    }
+
+
+    private void parseWhenOnlyLineAndHeaders(String[] stringArray){
+        if(hasOnlyRequestLineAndHeaders(stringArray)) {
+            requestLineAndHeaders = rawRequest.split(DOUBLE_CRLF)[0];
+            requestBody = "";
+        }
     }
 
     void parseRequestLineAndHeaders() {
@@ -45,20 +64,6 @@ class RequestParser  {
         protocol = splittedRequestLine[2];
     }
 
-    private void parseWhenIsCompleteRequest(String[] stringArray) {
-        if(isCompleteRequest(stringArray)) {
-            requestLineAndHeaders = rawRequest.split(DOUBLE_CRLF)[0];
-            requestBody = rawRequest.split(DOUBLE_CRLF)[1];
-        }
-    }
-
-    private void parseWhenOnlyLineAndHeaders(String[] stringArray){
-        if(hasOnlyRequestLineAndHeaders(stringArray)) {
-            requestLineAndHeaders = rawRequest.split(DOUBLE_CRLF)[0];
-            requestBody = "";
-        }
-    }
-
     private boolean isCompleteRequest(String[] stringArray) {
         return stringArray.length > 1;
     }
@@ -71,7 +76,9 @@ class RequestParser  {
         return requestLineAndHeaders;
     }
 
-    ArrayList<String> getRequestHeaders() {return requestHeaders;}
+    ArrayList<String> getRequestHeaders() {
+        return requestHeaders;
+    }
 
     String getRequestLine() {
         return requestLine;

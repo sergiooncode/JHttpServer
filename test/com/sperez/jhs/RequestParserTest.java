@@ -1,10 +1,13 @@
 package com.sperez.jhs;
 
 import org.junit.Test;
+
+import java.util.ArrayList;
+
 import static org.junit.Assert.assertEquals;
 
 public class RequestParserTest {
-    final private String CRLF = "\r\n\r\n";
+    final private String CRLF = "\r\n";
     private RequestParser parser;
 
     private String getRequestLineAndHeaders() {
@@ -135,5 +138,18 @@ public class RequestParserTest {
         assertEquals("Get", getRequestMethod());
         assertEquals("/", getRequestedResource());
         assertEquals("HTTP/1.1", getRequestProtocol());
+    }
+
+    @Test
+    public void testGetPartialContent() throws Exception {
+        parseRequestBasedOnDoubleCRLF("GET /partial_content.txt HTTP/1.1" + CRLF + "Range: bytes=0-4" + CRLF +
+                "Accept-Charset: utf-8" + CRLF + "Accept-Datetime: Thu, 31 May 2007 20:35:00 GMT" + CRLF);
+        parser.parseRequestLineAndHeaders();
+        parser.parseRequestLine();
+
+        assertEquals("GET /partial_content.txt HTTP/1.1", getRequestLine());
+        assertEquals("Range: bytes=0-4", getRequestHeaders(0));
+        assertEquals("Accept-Charset: utf-8", getRequestHeaders(1));
+        assertEquals("Accept-Datetime: Thu, 31 May 2007 20:35:00 GMT", getRequestHeaders(2));
     }
 }
