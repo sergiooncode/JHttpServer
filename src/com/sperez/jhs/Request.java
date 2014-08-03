@@ -14,38 +14,50 @@ public class Request {
         this.requestMethod = requestMethod;
         this.requestedResource = requestedResource;
         this.protocol = protocol;
+        this.requestLine = requestMethod + " " + requestedResource + " " + protocol;
         this.requestHeaders = requestHeaders;
         this.requestBody = requestBody;
     }
 
-    public String getRequestLine() {
-        return requestLine;
-    }
-
-    public String getRequestMethod() {
-        return requestMethod;
-    }
-
-    public String getRequestBody() {
-        return requestBody;
+    void addRequestHeader(String header) {
+        requestHeaders.add(header);
     }
 
     public String getRequestedResource() {
         return requestedResource;
     }
 
-    public ArrayList<String> getRequestHeaders() {return requestHeaders;}
-
     public boolean isGet() {
-        return getRequestMethod().equals("GET");
+        return requestMethod.equals("GET");
     }
 
     public boolean isPut() {
-        return getRequestMethod().equals("PUT");
+        return requestMethod.equals("PUT");
     }
 
     public boolean isPost() {
-        return getRequestMethod().equals("POST");
+        return requestMethod.equals("POST");
     }
 
+    public boolean isOptions() {
+        return requestMethod.equals("OPTIONS");
+    }
+
+    public boolean isHead() {
+        return requestMethod.equals("HEAD");
+    }
+
+    public boolean isPatch() {
+        return requestMethod.equals("PATCH");
+    }
+
+    public String getHeaderIfThereIs(String headerString) {
+        String completeHeader = "";
+        for(int i=0; i < requestHeaders.size(); i++) {
+            if(requestHeaders.get(i).contains(headerString)) {
+                completeHeader = requestHeaders.get(i);
+            }
+        }
+        return completeHeader;
+    }
 }
