@@ -12,6 +12,8 @@ class StatusCodeHandler {
             statusLine = "HTTP/1.1 405 Method Not Allowed";
         } else if (code.equals("301")) {
             statusLine = "HTTP/1.1 301 Moved Permanently";
+        } else if (code.equals("206")) {
+            statusLine = "HTTP/1.1 206 Partial Content";
         }
         return statusLine;
     }

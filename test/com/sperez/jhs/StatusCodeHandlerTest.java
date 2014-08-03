@@ -24,4 +24,9 @@ public class StatusCodeHandlerTest {
     public void testGetStatusLine301() throws Exception {
         assertEquals("HTTP/1.1 301 Moved Permanently", StatusCodeHandler.getStatusLine("301"));
     }
+
+    @Test
+    public void testGetStatusLine206() throws Exception {
+        assertEquals("HTTP/1.1 206 Partial Content", StatusCodeHandler.getStatusLine("206"));
+    }
 }
