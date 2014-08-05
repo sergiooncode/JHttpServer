@@ -14,6 +14,8 @@ class StatusCodeHandler {
             statusLine = "HTTP/1.1 301 Moved Permanently";
         } else if (code.equals("206")) {
             statusLine = "HTTP/1.1 206 Partial Content";
+        } else if (code.equals("204")) {
+            statusLine = "HTTP/1.1 204 No Content";
         }
         return statusLine;
     }
