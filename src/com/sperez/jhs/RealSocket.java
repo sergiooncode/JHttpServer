@@ -35,7 +35,7 @@ public class RealSocket implements SocketInterface {
         return connectionSocket.isClosed();
     }
 
-    public void close() {
+    public void disconnect() {
         try{
             connectionSocket.close();
         } catch(IOException e){

@@ -1,37 +1,47 @@
 package com.sperez.jhs;
 
-public class ClientHandler {
-    private ConnectionHandler connectionHandler;
+public class ClientHandler implements Runnable {
+    private SocketInterface connectionSocket;
     private ReaderWriter readerWriter;
     private HandlerInterface requestHandler, responseHandler;
     private Request request;
+    private ResponseBuilder responseBuilder;
+    private LogicInterface logic;
 
-
-    public ClientHandler(ConnectionHandler connectionHandler, int port, String publicDir) {
-        this.connectionHandler = connectionHandler;
+    public ClientHandler(SocketInterface connectionSocket, int port, String publicDir) {
+        this.connectionSocket = connectionSocket;
         this.requestHandler = new RequestHandler();
-        this.responseHandler = new ResponseHandler(port, publicDir);
+        this.logic = new RoutingLogic();
+        this.responseBuilder = new ResponseBuilder(logic);
+        this.responseHandler = new ResponseHandler(port, publicDir, responseBuilder);
+    }
+
+    public void run() {
+        try {
+            setupInputOutput();
+            handleRequest();
+            handleResponse();
+        }
+        finally {
+            readerWriter.closeWriter();
+            readerWriter.closeReader();
+            connectionSocket.disconnect();
+        }
     }
 
     private void setupInputOutput(){
-        readerWriter = new ReaderWriter(connectionHandler);
+        readerWriter = new ReaderWriter(connectionSocket);
         requestHandler.setupInputOutput(readerWriter);
         responseHandler.setupInputOutput(readerWriter);
     }
 
-    public void handle() {
-        try {
-            setupInputOutput();
-            requestHandler.handle();
-            request = requestHandler.getRequestObject();
-            responseHandler.setRequestObject(request);
-            responseHandler.handle();
-        }
+    private void handleRequest() {
+        requestHandler.handle();
+        request = requestHandler.getRequestObject();
+    }
 
-        finally {
-            readerWriter.closeWriter();
-            readerWriter.closeReader();
-            connectionHandler.disconnect();
-        }
+    private void handleResponse() {
+        responseHandler.setRequestObject(request);
+        responseHandler.handle();
     }
 }

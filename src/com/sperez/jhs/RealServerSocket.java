@@ -16,7 +16,7 @@ public class RealServerSocket implements ServerSocketInterface {
         }
     }
 
-    public RealSocket accept(){
+    public RealSocket connect(){
         Socket connectionSocket = null;
         try{
             connectionSocket = listenSocket.accept();

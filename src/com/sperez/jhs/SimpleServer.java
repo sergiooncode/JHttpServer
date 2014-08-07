@@ -2,32 +2,30 @@ package com.sperez.jhs;
 
 public class SimpleServer {
     private boolean keepGoing;
-    private ConnectionHandler connectionHandler;
-    private ClientHandler handler;
+    private ServerSocketInterface listenSocket;
+    private int port;
+    private String publicDir;
 
-    public SimpleServer(ConnectionHandler connectionHandler) {
-        this.connectionHandler = connectionHandler;
+    public SimpleServer(ServerSocketInterface listenSocket, int port, String publicDir) {
+        this.listenSocket = listenSocket;
+        this.port = port;
+        this.publicDir = publicDir;
     }
 
     public void run() {
         keepGoing = true;
 
-        while ( keepGoing()) {
-            connect();
-            handleClient();
+        while (keepGoing()) {
+            handleClient(connect());
         }
     }
 
-    public void setupClientHandler(ClientHandler handler) {
-        this.handler = handler;
+    private void handleClient(SocketInterface connectionSocket) {
+        new Thread (new ClientHandler(connectionSocket, port, publicDir)).start();
     }
 
-    private void handleClient() {
-        handler.handle();
-    }
-
-    private void connect() {
-        connectionHandler.connect();
+    private SocketInterface connect() {
+        return listenSocket.connect();
     }
 
     private boolean keepGoing() {

@@ -5,15 +5,10 @@ public class Main {
         ServerSocketInterface listenSocket;
         SimpleServer server;
         ArgumentsParser parser;
-        ConnectionHandler connectionHandler;
-        ClientHandler handler;
 
         parser = new ArgumentsParser(args);
         listenSocket = new RealServerSocket(parser.getPort());
-        connectionHandler = new ConnectionHandler(listenSocket);
-        server = new SimpleServer(connectionHandler);
-        handler = new ClientHandler(connectionHandler, parser.getPort(), parser.getPublicDir());
-        server.setupClientHandler(handler);
+        server = new SimpleServer(listenSocket, parser.getPort(), parser.getPublicDir());
 
         server.run();
     }

@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public interface SocketInterface {
-    void close();
+    void disconnect();
     boolean isClosed();
     InputStream getInput();
     OutputStream getOutput();
