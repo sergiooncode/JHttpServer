@@ -2,18 +2,18 @@ package com.sperez.jhs;
 
 public class ClientHandler implements Runnable {
     private SocketInterface connectionSocket;
-    private ReaderWriter readerWriter;
-    private HandlerInterface requestHandler, responseHandler;
+    private WriterInterface writer;
+    private ReaderInterface reader;
+    private RequestHandlerInterface requestHandler;
+    private ResponseHandlerInterface responseHandler;
     private Request request;
-    private ResponseBuilder responseBuilder;
-    private LogicInterface logic;
 
     public ClientHandler(SocketInterface connectionSocket, int port, String publicDir) {
         this.connectionSocket = connectionSocket;
         this.requestHandler = new RequestHandler();
-        this.logic = new RoutingLogic();
-        this.responseBuilder = new ResponseBuilder(logic);
-        this.responseHandler = new ResponseHandler(port, publicDir, responseBuilder);
+        LogicInterface logic = new RoutingLogic();
+        ResponseBuilder builder = new ResponseBuilder(logic);
+        this.responseHandler = new ResponseHandler(port, publicDir, builder);
     }
 
     public void run() {
@@ -23,16 +23,17 @@ public class ClientHandler implements Runnable {
             handleResponse();
         }
         finally {
-            readerWriter.closeWriter();
-            readerWriter.closeReader();
+            writer.close();
+            reader.close();
             connectionSocket.disconnect();
         }
     }
 
     private void setupInputOutput(){
-        readerWriter = new ReaderWriter(connectionSocket);
-        requestHandler.setupInputOutput(readerWriter);
-        responseHandler.setupInputOutput(readerWriter);
+        reader = new Reader(connectionSocket);
+        writer = new Writer(connectionSocket);
+        requestHandler.setupInput(reader);
+        responseHandler.setupOutput(writer);
     }
 
     private void handleRequest() {

@@ -2,13 +2,12 @@ package com.sperez.jhs;
 
 import java.util.ArrayList;
 
-public class RequestHandler implements HandlerInterface {
-    private ReaderWriter reader;
+public class RequestHandler implements RequestHandlerInterface {
+    private ReaderInterface reader;
     private String rawRequest = "";
     private RequestParser parser;
     private Request requestObject;
 
-    @Override
     public void handle() {
         readRequest();
         createRequestObject();
@@ -25,8 +24,7 @@ public class RequestHandler implements HandlerInterface {
         return requestObject;
     }
 
-    @Override
-    public void setupInputOutput(ReaderWriter reader) {
+    public void setupInput(ReaderInterface reader) {
         this.reader = reader;
     }
 
@@ -39,7 +37,7 @@ public class RequestHandler implements HandlerInterface {
         this.rawRequest = rawRequest;
     }
 
-    public void setRequestObject(Request requestObject) {
+    void setRequestObject(Request requestObject) {
         this.requestObject = requestObject;
     }
 

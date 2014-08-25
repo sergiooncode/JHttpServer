@@ -1,20 +1,20 @@
 package com.sperez.jhs;
 
-public class ResponseHandler implements HandlerInterface {
-    private ReaderWriter writer;
+public class ResponseHandler implements ResponseHandlerInterface {
+    private WriterInterface writer;
     private Response responseObject;
-    private ResponseBuilder responseBuilder;
+    private ResponseBuilder builder;
     private int port;
     private String publicDir;
     private Request requestObject;
 
-    public ResponseHandler(int port, String publicDir) {
+    public ResponseHandler(int port, String publicDir, ResponseBuilder builder) {
         this.port = port;
         this.publicDir = publicDir;
+        this.builder = builder;
     }
 
-    @Override
-    public void setupInputOutput(ReaderWriter writer) {
+    public void setupOutput(WriterInterface writer) {
         this.writer = writer;
     }
 
@@ -24,12 +24,12 @@ public class ResponseHandler implements HandlerInterface {
         sendResponse();
     }
 
-    public Request getRequestObject() {
+    Request getRequestObject() {
         return requestObject;
     }
 
     public void setRequestObject(Request requestObject) {
-        this.requestObject = requestObject;
+        builder.setRequestObject(requestObject);
     }
 
     Response getResponseObject() {
@@ -37,23 +37,33 @@ public class ResponseHandler implements HandlerInterface {
     }
 
     void createResponseObject() {
-        responseObject = callBuilder().buildResponse();
-    }
-
-    private ResponseBuilder callBuilder() {
-        responseBuilder = new ResponseBuilder(requestObject);
         setPortAndPublicDir();
-        return responseBuilder;
+        responseObject = builder.buildResponse();
     }
 
     private void setPortAndPublicDir() {
-        responseBuilder.setPort(port);
-        responseBuilder.setPublicDir(publicDir);
+        builder.setPortAndPublicDir(port, publicDir);
     }
 
     private void sendResponse() {
-        writer.writeLine(responseObject);
+        writer.writeMessage(responseObject);
         writer.sendAll();
-        writer.closeWriter();
+        writer.close();
     }
 }
+
+//def status_message code
+//        {
+//        '200' => 'OK',
+//        '404' => 'Not Found',
+//        '500' => 'Server Error'
+//        }[code]
+//        end
+//
+//        def handle request
+//        {
+//        'POST' => PostHandler.new,
+//        'PUT' => PutHandler.new,
+//        'GET' => GetHandler.new,
+//        }[request.method].handle
+//        end

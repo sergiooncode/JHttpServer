@@ -8,7 +8,7 @@ import java.io.OutputStream;
 public class MockSocket implements SocketInterface {
     private boolean isClosed;
 
-    public void close() {
+    public void disconnect() {
         isClosed = true;
     }
 

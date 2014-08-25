@@ -11,8 +11,7 @@ import java.nio.file.Paths;
 import static org.junit.Assert.*;
 
 public class FileHandlingUtilsTest {
-    final private String publicDir = "/Users/sergioperez/Mycodestore/cob_spec/" +
-            "server_jar_dir/public";
+    final private String publicDir = "/Users/sergioperezaranda/Mycodestore/JHttpServer/public";
     private byte[] readBytes(String path) {
         byte[] byteArray = null;
         try {
@@ -25,12 +24,12 @@ public class FileHandlingUtilsTest {
 
     @Test
     public void testLengthOfByteArray() throws Exception {
-        assertEquals("14", FileHandlingUtils.lengthOfFileInBytes(publicDir + "/file1"));
+        assertEquals("15", FileHandlingUtils.lengthOfFileInBytes(publicDir + "/file1"));
     }
 
     @Test
     public void testReadTextFile() throws Exception {
-        assertEquals("file1 contents", FileHandlingUtils.readTextFile(publicDir + "/file1"));
+        assertEquals("file1 contents\n", FileHandlingUtils.readTextFile(publicDir + "/file1"));
     }
 
     @Test
@@ -43,7 +42,7 @@ public class FileHandlingUtilsTest {
 
     @Test
     public void testReadGifImageFile() throws Exception {
-        String path = publicDir + "/image.gif";
+        String path = publicDir + "/image.tiff";
         byte[] sourceFileInBytes = readBytes(path);
 
         assertThat(sourceFileInBytes, IsEqual.equalTo(FileHandlingUtils.readImageFile(path)));

@@ -4,7 +4,7 @@ import com.sperez.jhs.ServerSocketInterface;
 
 public class MockServerSocket implements ServerSocketInterface {
     @Override
-    public MockSocket accept() {
+    public MockSocket connect() {
         return new MockSocket();
     }
 

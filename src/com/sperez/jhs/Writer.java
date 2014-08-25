@@ -1,28 +1,19 @@
 package com.sperez.jhs;
 
 import java.io.*;
-import java.io.IOException;
 
-public class ReaderWriter {
+public class Writer implements WriterInterface {
     final private String CRLF = "\r\n";
-    private InputStreamReader in;
-    private BufferedReader inFromClient;
     private BufferedOutputStream out;
     private OutputStreamWriter outToClient;
-    private SocketInterface connectionSocket;
     private Response responseObject;
 
-    public ReaderWriter(ConnectionHandler connectionHandler) {
-        connectionSocket = connectionHandler.getConnectionSocket();
-
-        in = new InputStreamReader(connectionSocket.getInput());
-        inFromClient = new BufferedReader (in);
-
-        out = new BufferedOutputStream (connectionSocket.getOutput());
+    public Writer(SocketInterface connectionSocket) {
+        out = new BufferedOutputStream(connectionSocket.getOutput());
         outToClient = new OutputStreamWriter(out);
     }
 
-    public void writeLine(Response responseObject) {
+    public void writeMessage(Response responseObject) {
         this.responseObject = responseObject;
         writeStatusLine();
         writeHeaders();
@@ -37,33 +28,13 @@ public class ReaderWriter {
         }
     }
 
-    public void closeReader() {
-        try {
-            inFromClient.close();
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void closeWriter() {
+    public void close() {
         try {
             outToClient.close();
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public String readLine(){
-        String lineReceived = "";
-        try{
-            lineReceived = inFromClient.readLine();
-
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-        return lineReceived;
     }
 
     private void writeStatusLine() {
